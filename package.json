@@ -4,11 +4,37 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "start": "start-storybook -p 6006 --ci",
+    "test": "jest",
+    "storybook": "start-storybook -p 6006",
+    "lint": "eslint",
+    "build-storybook": "build-storybook"
   },
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "1.2.19",
+    "@fortawesome/free-solid-svg-icons": "5.9.0",
+    "@fortawesome/react-fontawesome": "0.1.4",
+    "react": "16.8.6",
+    "react-apollo": "2.5.4",
+    "react-dom": "16.8.6",
+    "styled-components": "4.3.2"
+  },
   "devDependencies": {
+    "@babel/core": "7.7.7",
+    "@storybook/addon-actions": "5.0.11",
+    "@storybook/addon-links": "5.0.11",
+    "@storybook/addons": "5.0.11",
+    "@storybook/html": "5.2.8",
+    "babel-eslint": "10.0.1",
+    "babel-loader": "8.0.6",
+    "eslint": "6.8.0",
+    "eslint-config-airbnb": "18.0.1",
+    "eslint-plugin-import": "2.19.1",
+    "eslint-plugin-jsx-a11y": "6.2.3",
+    "eslint-plugin-react": "7.17.0",
+    "eslint-plugin-react-hooks": "1.7.0",
     "jest": "24.9.0"
   }
 }
