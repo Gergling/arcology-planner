@@ -102,7 +102,9 @@ class GridElement extends Component {
       height: size + 'px',
       border: 'solid 1px black',
     };
-    return (<div style={style}>{element.x},{element.y}</div>);
+    console.log(element.getContentCallback())
+    // return (<div style={style}>{element.x},{element.y}</div>);
+    return (<div style={style}>{element.getContentCallback()}</div>);
   }
 }
 

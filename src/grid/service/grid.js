@@ -57,6 +57,13 @@ class GridElement {
   set grid(value) {
     throw new Error('Cannot set grid.');
   }
+  setContentCallback(callback) {
+    this._callback = callback;
+  }
+  getContentCallback() {
+    console.log(this.x, this.y, typeof this._callback === 'function' ? this._callback() : '(no callback)')
+    return typeof this._callback === 'function' ? this._callback() : undefined;
+  }
 }
 
 function instantiate() {
