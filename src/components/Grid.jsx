@@ -92,8 +92,8 @@ class GridElement extends Component {
   render() {
     const element = this.props.element;
     const size = element.grid.getElementSize();
-    const x = element.x;
-    const y = element.y;
+    const x = element.x * size;
+    const y = element.y * size;
     const style = {
       position: 'absolute',
       left: x + 'px',

@@ -9,6 +9,7 @@ import gridService from '../src/grid';
 console.log(gridService)
 
 const grid = gridService()
+  .setElementSize(50)
   .setElement(0,0)
   .setElement(0,1)
   .setElement(1,1)
