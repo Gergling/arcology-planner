@@ -4,10 +4,18 @@ import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
 import Grid from '../src/components/Grid';
-// const Grid = require('../src/components/Grid');
+import gridService from '../src/grid';
+
+console.log(gridService)
+
+const grid = gridService()
+  .setElement(0,0)
+  .setElement(0,1)
+  .setElement(1,1)
+  .setElement(1,0);
 
 storiesOf('Grid', module)
-  .add('simple test', () => <Grid />);
+  .add('simple test', () => <Grid grid={grid} />);
 
   // .add('with undefined blank item', () => <Dropdown list={list.map(item => item.value ? item : undefined)} select={action('selected undefined item')} />)
   // .add('with placeholder label', () => <Dropdown list={list.map(item => item.value ? item : {label: 'Placeholder'})} select={action('selected placeholder label')} />)

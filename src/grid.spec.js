@@ -1,4 +1,4 @@
-const service = require('./grid');
+const service = require('./grid').default;
 
 describe('Grid', () => {
   describe('Basic Getting and Setting', () => {

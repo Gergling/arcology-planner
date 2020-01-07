@@ -63,4 +63,4 @@ function instantiate() {
   return new Grid();
 }
 
-module.exports = instantiate;
+export default instantiate;

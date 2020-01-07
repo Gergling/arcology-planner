@@ -86,24 +86,46 @@ import styled from 'styled-components';
 //   }
 // `;
 
-export default class Grid extends Component {
+// Handle size of grid elements through a styled component.
+
+class GridElement extends Component {
   render() {
-    return (<div>Blarg</div>);
+    const element = this.props.element;
+    const size = element.grid.getElementSize();
+    const x = element.x;
+    const y = element.y;
+    const style = {
+      position: 'absolute',
+      left: x + 'px',
+      top: y + 'px',
+      width: size + 'px',
+      height: size + 'px',
+      border: 'solid 1px black',
+    };
+    return (<div style={style}>{element.x},{element.y}</div>);
   }
-  // constructor(props) {
-  //   super();
-  //   if (typeof props.list !== 'object') {
-  //     throw `Dropdown: 'list' attribute is required.`;
-  //   }
-  //   if (props.list.constructor !== [].constructor) {
-  //     throw `Dropdown: 'list' attribute must be an array.`;
-  //   }
-  //   const selected = props.list.find(item => (item || {}).value === props.selected) || {};
-  //   this.state = {
-  //     open: false,
-  //     selected
-  //   };
-  // }
+}
+
+export default class Grid extends Component {
+  constructor(props) {
+    super();
+    this.state = {
+      gridElements: props.grid.getElements()
+    };
+  }
+  render() {
+    const style = {
+      position: 'relative'
+    };
+    return (
+      <div style={style}>{this.state.gridElements
+        .map((item, key) => <GridElement
+          key={key}
+          element={item}
+        />)}
+      </div>
+    );
+  }
   // handleSelect(item) {
   //   this.props.select(item);
   //   this.setState({
@@ -116,37 +138,5 @@ export default class Grid extends Component {
   // }
   // handleBlur() {
   //   this.setState({open: false});
-  // }
-  // renderOptions() {
-  //   return this.state.open ? (
-  //     <OptionsWrapper>
-  //       <OptionsList>
-  //         {this.props.list.map((item, key) => (
-  //           <OptionsListItem
-  //             key={key}
-  //             data-value={item ? item.value : ''}
-  //             onClick={this.handleSelect.bind(this, item)}
-  //           >
-  //             {item ? item.label : ''}
-  //           </OptionsListItem>
-  //         ))}
-  //       </OptionsList>
-  //     </OptionsWrapper>
-  //   ) : '';
-  // }
-  // render() {
-  //   return (
-  //     <DropdownWrapper tabIndex="1" onBlur={this.handleBlur.bind(this)}>
-  //       <div>
-  //         <DropdownInputWrapper>
-  //           <DropdownInput>{this.state.selected.label}</DropdownInput>
-  //         </DropdownInputWrapper>
-  //         <DropdownButton onClick={this.handleClick.bind(this)}>
-  //           <FontAwesomeIcon icon={faChevronDown} />
-  //         </DropdownButton>
-  //       </div>
-  //       {this.renderOptions()}
-  //     </DropdownWrapper>
-  //   );
   // }
 }
