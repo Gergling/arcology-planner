@@ -8,6 +8,7 @@
     "test": "jest",
     "storybook": "start-storybook -p 6006",
     "lint": "eslint",
+    "watch-test": "jest --watch",
     "build-storybook": "build-storybook"
   },
   "author": "",
@@ -28,6 +29,7 @@
     "@storybook/addons": "5.0.11",
     "@storybook/react": "5.0.11",
     "babel-eslint": "10.0.1",
+    "babel-jest": "24.9.0",
     "babel-loader": "8.0.6",
     "eslint": "6.8.0",
     "eslint-config-airbnb": "18.0.1",
