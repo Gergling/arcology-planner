@@ -6,7 +6,7 @@ import { action } from '@storybook/addon-actions';
 import Grid from '../src/grid/component/Grid';
 import gridService from '../src/grid/service/grid';
 import Sprite from '../src/sprite/component/Sprite';
-import spriteService from '../src/sprite/service/simpleSprite';
+import spriteService from '../src/sprite/service/pathfindingSprite';
 
 const grid = gridService()
   .setElementSize(50)
