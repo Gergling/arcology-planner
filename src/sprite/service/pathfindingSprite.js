@@ -1,6 +1,8 @@
 import React from 'react';
 import Sprite from '../component/Sprite';
 
+import direction from '../../grid/service/direction';
+
 class PathfindingSprite {
   constructor(g, h) {
     this._g = g;
@@ -36,19 +38,7 @@ class PathfindingSprite {
     return this;
   }
   getDirection(x, y) {
-    const deviation = {
-      x: x - this._gridElement.x,
-      y: y - this._gridElement.y,
-    }
-    const v = {
-      '-1': 'n',
-      '1': 's',
-    }[deviation.y] || '';
-    const h = {
-      '-1': 'w',
-      '1': 'e',
-    }[deviation.x] || '';
-    return v + h;
+    return direction.getCompassDirection(x - this._gridElement.x, y - this._gridElement.y);
   }
   getApproachingDirection() {
     return this.getDirection(this._previous.x, this._previous.y);
