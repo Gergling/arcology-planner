@@ -7,6 +7,7 @@ const rectangularDirections = Array
       const angleRadians = Math.atan2(x, -y);
       const angleDegrees = ((angleRadians * 360) / (Math.PI * 2));
       const compassDirection = getCompassDirection(x, y);
+      // TODO: Consider distance so that this can be used in maps.
       return {
         x,
         y,
@@ -17,6 +18,10 @@ const rectangularDirections = Array
     }));
   }, [])
   .filter(direction => direction.x !== 0 || direction.y !== 0);
+
+function getDistance(x, y) {
+  return getCompassDirection(x, y).length === 2 ? 1.4 : 1;
+}
 
 function getCompassDirection(x, y) {
   const v = {
@@ -32,5 +37,6 @@ function getCompassDirection(x, y) {
 
 export default {
   getCompassDirection,
-  rectangularDirections
+  rectangularDirections,
+  getDistance
 }
