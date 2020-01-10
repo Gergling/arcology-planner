@@ -21,6 +21,9 @@ class PathfindingSprite {
   get gridElement() {
     return this._gridElement;
   }
+  get size() {
+    return this._gridElement.grid.getElementSize();
+  }
   setGridElement(gridElement) {
     this._gridElement = gridElement;
     this._gridElement.setContentCallback(() => this.getComponent());
