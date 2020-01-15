@@ -101,7 +101,7 @@ class Map {
       squares.forEach(square2 => {
         if (isAdjacentSquare(square1, square2) && isPassable(square1, impassable) && isPassable(square2, impassable)) {
           // Add a link for all adjacent squares.
-          const distance = directionService.getDirection(square1.x - square2.x, square1.y - square2.y);
+          const distance = directionService.getDistance(square1.x - square2.x, square1.y - square2.y);
           square1.location.setLink(square2.location, distance);
         }
       });
