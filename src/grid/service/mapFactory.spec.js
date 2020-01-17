@@ -18,4 +18,19 @@ describe('Map', () => {
       expect(square.constructor).toEqual(({}).constructor);
     });
   });
+  test('#getTextDisplay', () => {
+    const map = mapFactory().generateSquare(3, square => square.x !== 1 || square.y !== 1);
+    const text = map.getTextDisplay();
+    expect(text).toEqual('OOO\nOXO\nOOO\n');
+  })
+});
+
+describe('Square', () => {
+  test('#getDistance', () => {
+    const map = mapFactory().generateSquare(3);
+    const topLeft = map.findLocationByName('0,0');
+    const bottomRight = map.findLocationByName('2,2');
+
+    expect(topLeft.getDistance(bottomRight)).toEqual(4);
+  });
 });
