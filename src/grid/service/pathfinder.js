@@ -21,7 +21,7 @@ class Path {
   get closed() {return this._closed;}
   get path() {return this._path;}
   addAncestorsToPath(node) {
-    this._path = this._path.concat([node]);
+    this._path.push(node);
     if (node.parent) {
       this.addAncestorsToPath(node.parent);
     } else {
@@ -79,8 +79,7 @@ class Node {
     return this;
   }
   getAncestorG() {
-    const ancestorG = this.parent ? this.parent.getAncestorG() + this.distance : 0;
-    return ancestorG;
+    return this.parent ? this.parent.getAncestorG() + this.distance : 0;
   }
   setAncestorH(h) {
     this._h = h;
@@ -102,9 +101,11 @@ class Node {
     return this;
   }
   foreachAdjacent(callback) {
+    let halt = false;
     this.location.links.forEach(link => {
+      if (halt) return;
       const location = this.location === link.location1 ? link.location2 : link.location1;
-      callback(location, link.distance);
+      halt = callback(location, link.distance);
     });
   }
 }
@@ -117,42 +118,48 @@ function repeat(previousNode, path) {
   // If the open list was empty, we're done.
   if (!sNode) {return;}
 
+  // If the destination is in the closed list, we're done.
+  if (path.getDestinationClosed()) {return;}
+
   // console.log('sNode:', sNode.location.name, sNode.f)
 
   // TODO: Could save a little time checking if sNode is the destination node.
 
+  // TODO: Consider using a while loop to quit early.
   // For each square T in S’s walkable adjacent tiles:
   sNode.foreachAdjacent((tLocation, distance) => {
-    // T is a location object.
-    // If T is in the closed list: Ignore it.
-    // console.log('checking adjacent:', tLocation.name)
-    if (path.getClosed(tLocation)) {return;}
-
-    // console.log('is not closed')
-
-    // If T is not in the open list: Add it and compute its score.
-    const open = path.getOpen(tLocation);
-    if (!open) {
-      path.open(tLocation, sNode);
-      // console.log('was not open, added')
-    } else {
-      const tNode = new Node(tLocation, previousNode, distance, path.destination);
-      // console.log('is open', tNode.h, open.h)
-      // If T is already in the open list: Check if the F score is lower when we use the current generated path to get there.
-      // If the F score is lower for the new node, ignore it.
-      if (tNode.f < sNode.f) {
-        // If it is, update its score and update its parent as well.
-        // console.log('updating')
-        open.setPrevious(previousNode, distance);
-      }
-    }
+    processAdjacentLocation(tLocation, distance, path, sNode);
   });
-
-  // If the destination is in the closed list, we're done.
-  if (path.getDestinationClosed()) {return;}
 
   // Once all computation is done, repeat for sNode.
   repeat(sNode, path);
+}
+
+function processAdjacentLocation(tLocation, distance, path, sNode) {
+  // T is a location object.
+  // If T is in the closed list: Ignore it.
+  if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('checking adjacent:', tLocation.name)
+  if (path.getClosed(tLocation)) {return;}
+
+  if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('is not closed')
+
+  // If T is not in the open list: Add it and compute its score.
+  const open = path.getOpen(tLocation);
+  if (!open) {
+    path.open(tLocation, sNode);
+    if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('was not open, added')
+  } else {
+    const tNode = new Node(tLocation, sNode, distance, path.destination);
+    // if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('is open', tNode.location.name, tNode.h, open.location.name, open.h)
+    // If T is already in the open list: Check if the F score is lower when we use the current generated path to get there.
+    // If the F score is lower for the new node, ignore it.
+    // TODO: Review this logic.
+    if (tNode.g < sNode.g) {
+      // If it is, update its score and update its parent as well.
+      if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('updating')
+      open.setPrevious(sNode, distance);
+    }
+  }
 }
 
 function instantiate(start, destination) {

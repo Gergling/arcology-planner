@@ -115,7 +115,8 @@ class Square extends Location {
   getDistance(location) {
     // const adjacentDistance = this.getAdjacentLocationDistance(location);
     // return adjacentDistance ? adjacentDistance : getDistance(this, location);
-    return Math.abs(this.x - location.x) + Math.abs(this.y - location.y);
+    // return Math.abs(this.x - location.x) + Math.abs(this.y - location.y);
+    return getSquareDistance(this, location);
   }
   get x() {return this._x;}
   get y() {return this._y;}

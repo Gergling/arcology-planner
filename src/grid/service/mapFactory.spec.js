@@ -31,6 +31,6 @@ describe('Square', () => {
     const topLeft = map.findLocationByName('0,0');
     const bottomRight = map.findLocationByName('2,2');
 
-    expect(topLeft.getDistance(bottomRight)).toEqual(4);
+    expect(topLeft.getDistance(bottomRight)).toEqual(Math.sqrt(2) * 2);
   });
 });
