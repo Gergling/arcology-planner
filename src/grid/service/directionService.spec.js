@@ -1,18 +1,18 @@
-import directionService from './direction';
+import {getCompassDirection, rectangularDirections, isAdjacent} from './directionService';
 
 describe('Direction', () => {
   test('#getDirection', () => {
-    expect(directionService.getCompassDirection(-1, -1)).toEqual('nw');
-    expect(directionService.getCompassDirection(-1, 0)).toEqual('w');
-    expect(directionService.getCompassDirection(0, -1)).toEqual('n');
-    expect(directionService.getCompassDirection(-1, 1)).toEqual('sw');
-    expect(directionService.getCompassDirection(1, -1)).toEqual('ne');
-    expect(directionService.getCompassDirection(1, 1)).toEqual('se');
-    expect(directionService.getCompassDirection(0, 1)).toEqual('s');
-    expect(directionService.getCompassDirection(1, 0)).toEqual('e');
+    expect(getCompassDirection(-1, -1)).toEqual('nw');
+    expect(getCompassDirection(-1, 0)).toEqual('w');
+    expect(getCompassDirection(0, -1)).toEqual('n');
+    expect(getCompassDirection(-1, 1)).toEqual('sw');
+    expect(getCompassDirection(1, -1)).toEqual('ne');
+    expect(getCompassDirection(1, 1)).toEqual('se');
+    expect(getCompassDirection(0, 1)).toEqual('s');
+    expect(getCompassDirection(1, 0)).toEqual('e');
   });
   test('#rectangularDirections', () => {
-    directionService.rectangularDirections.forEach(direction => {
+    rectangularDirections.forEach(direction => {
       if (direction.compassDirection === 'n') {
         expect(direction.x).toEqual(0);
         expect(direction.y).toEqual(-1);
