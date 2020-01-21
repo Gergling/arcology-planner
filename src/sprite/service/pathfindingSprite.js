@@ -1,7 +1,7 @@
 import React from 'react';
 import Sprite from '../component/Sprite';
 
-import direction from '../../grid/service/direction';
+import {getCompassDirection} from '../../grid/service/directionService';
 
 class PathfindingSprite {
   constructor(g, h) {

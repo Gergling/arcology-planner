@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 
-import directionService from '../../grid/service/direction';
+import directionService from '../../grid/service/directionService';
 
 const BorderSquare = styled.div`
   position: absolute;

@@ -1,4 +1,4 @@
-import directionService from './direction';
+import {getDistance} from './directionService';
 
 function isAdjacentSquare(square1, square2) {
   return square1.x === square2.x + 1

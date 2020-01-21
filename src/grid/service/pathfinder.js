@@ -1,6 +1,4 @@
-function isFLower(node1, node2) {
-  return node1.f < node2.f;
-}
+import {sortByF, getAncestry} from './pathfinderService';
 
 class Path {
   constructor(start, destination) {
