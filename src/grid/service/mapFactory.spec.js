@@ -22,7 +22,12 @@ describe('Map', () => {
     const map = mapFactory().generateSquare(3, square => square.x !== 1 || square.y !== 1);
     const text = map.getTextDisplay();
     expect(text).toEqual('OOO\nOXO\nOOO\n');
-  })
+  });
+  test('#generateSquare', () => {
+    const map = mapFactory().generateSquare(3, square => square.x !== 1 || square.y !== 1);
+    const topLeft = map.findLocationByName('0,0');
+    expect(topLeft.links.length).toEqual(2);
+  });
 });
 
 describe('Square', () => {

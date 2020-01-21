@@ -9,8 +9,8 @@ class Path {
     this._start = start;
     this._destination = destination;
 
-    const startingNode = this.open(start);
-    repeat(startingNode, this);
+    this.open(start);
+    this.next();
     const destinationNode = this.getDestinationClosed();
     this.addAncestorsToPath(destinationNode);
   }
@@ -18,18 +18,17 @@ class Path {
   get destination() {return this._destination;}
   get closed() {return this._closed;}
   get path() {return this._path;}
+  instantiateNode(location, previousNode) {
+    const distance = previousNode ? location.getDistance(previousNode.location) : 0;
+    return new Node(location, previousNode, distance, this._destination)
+  }
   addAncestorsToPath(node) {
-    this._path.push(node);
-    if (node.parent) {
-      this.addAncestorsToPath(node.parent);
-    } else {
-      this._path.reverse();
-    }
+    this._path = getAncestry(node);
   }
   open(location, previousNode) {
-    const distance = previousNode ? location.getDistance(previousNode.location) : 0;
-    const node = new Node(location, previousNode, distance, this._destination);
+    const node = this.instantiateNode(location, previousNode);
     this._open.push(node);
+    this._open.sort(sortByF);
     return node;
   }
   close(node) {
@@ -39,7 +38,7 @@ class Path {
   closeNextOpenNode() {
     // Get the item in the open list with the lowest F score.
     // Remove it from the open list.
-    const node = this._open.sort(isFLower).shift();
+    const node = this._open.shift();
     if (node) {
       // Add to the closed list.
       this.close(node);
@@ -54,6 +53,47 @@ class Path {
   }
   getDestinationClosed() {
     return this.getClosed(this.destination);
+  }
+  next() {
+    // Get the square on the open list which has the lowest score. Let’s call this square S.
+    // Remove S from the open list and add S to the closed list.
+    const sNode = this.closeNextOpenNode();
+
+    // If the open list was empty, we're done.
+    if (!sNode) {return;}
+
+    // If the destination is in the closed list, we're done.
+    if (this.getDestinationClosed()) {return;}
+
+    // TODO: Could save a little time checking if sNode is the destination node.
+
+    // TODO: Consider using a while loop to quit early.
+    // For each square T in S’s walkable adjacent tiles:
+    sNode.foreachAdjacent((tLocation, distance) => {
+      this.nextAdjacentLocation(tLocation, distance, sNode);
+    });
+
+    // Once all computation is done, repeat for sNode.
+    this.next();
+  }
+  nextAdjacentLocation(tLocation, distance, sNode) {
+    // T is a location object.
+    // If T is in the closed list: Ignore it.
+    if (this.getClosed(tLocation)) {return;}
+
+    // If T is not in the open list: Add it and compute its score.
+    const open = this.getOpen(tLocation);
+    if (!open) {
+      this.open(tLocation, sNode);
+    } else {
+      const tNode = this.instantiateNode(tLocation, sNode);
+      // If T is already in the open list: Check if the F score is lower when we use the current generated path to get there.
+      // If the F score is lower for the new node, ignore it.
+      if (tNode.g < sNode.g) {
+        // If it is, update its score and update its parent as well.
+        open.setPrevious(sNode, distance);
+      }
+    }
   }
 }
 
@@ -102,61 +142,9 @@ class Node {
     let halt = false;
     this.location.links.forEach(link => {
       if (halt) return;
-      const location = this.location === link.location1 ? link.location2 : link.location1;
+      const location = link.getLinkedLocation(this.location);
       halt = callback(location, link.distance);
     });
-  }
-}
-
-function repeat(previousNode, path) {
-  // Get the square on the open list which has the lowest score. Let’s call this square S.
-  // Remove S from the open list and add S to the closed list.
-  const sNode = path.closeNextOpenNode();
-
-  // If the open list was empty, we're done.
-  if (!sNode) {return;}
-
-  // If the destination is in the closed list, we're done.
-  if (path.getDestinationClosed()) {return;}
-
-  // console.log('sNode:', sNode.location.name, sNode.f)
-
-  // TODO: Could save a little time checking if sNode is the destination node.
-
-  // TODO: Consider using a while loop to quit early.
-  // For each square T in S’s walkable adjacent tiles:
-  sNode.foreachAdjacent((tLocation, distance) => {
-    processAdjacentLocation(tLocation, distance, path, sNode);
-  });
-
-  // Once all computation is done, repeat for sNode.
-  repeat(sNode, path);
-}
-
-function processAdjacentLocation(tLocation, distance, path, sNode) {
-  // T is a location object.
-  // If T is in the closed list: Ignore it.
-  if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('checking adjacent:', tLocation.name)
-  if (path.getClosed(tLocation)) {return;}
-
-  if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('is not closed')
-
-  // If T is not in the open list: Add it and compute its score.
-  const open = path.getOpen(tLocation);
-  if (!open) {
-    path.open(tLocation, sNode);
-    if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('was not open, added')
-  } else {
-    const tNode = new Node(tLocation, sNode, distance, path.destination);
-    // if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('is open', tNode.location.name, tNode.h, open.location.name, open.h)
-    // If T is already in the open list: Check if the F score is lower when we use the current generated path to get there.
-    // If the F score is lower for the new node, ignore it.
-    // TODO: Review this logic.
-    if (tNode.g < sNode.g) {
-      // If it is, update its score and update its parent as well.
-      if (['1,2', '2,1'].indexOf(tLocation.name) > -1 && false) console.log('updating')
-      open.setPrevious(sNode, distance);
-    }
   }
 }
 

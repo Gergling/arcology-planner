@@ -41,7 +41,7 @@ class PathfindingSprite {
     return this;
   }
   getDirection(x, y) {
-    return direction.getCompassDirection(x - this._gridElement.x, y - this._gridElement.y);
+    return getCompassDirection(x - this._gridElement.x, y - this._gridElement.y);
   }
   getApproachingDirection() {
     return this.getDirection(this._previous.x, this._previous.y);

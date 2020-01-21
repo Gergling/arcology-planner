@@ -1,35 +1,6 @@
 import {getDistance} from './directionService';
 
-function isAdjacentSquare(square1, square2) {
-  return square1.x === square2.x + 1
-    || square1.x === square2.x - 1
-    || square1.y === square2.y + 1
-    || square1.y === square2.y - 1;
-}
-
-// function isPassable(square, impassableSquares) {
-//   return impassableSquares.find(impassableSquare => square.x === impassableSquare.x && square.y === impassableSquare.y) === undefined;
-// }
-
-function getDistance(location1, location2) {
-  return location1.type === 'square' && location2.type === 'square' ? getSquareDistance(location1, location2) : -1;
-}
-
-function getSquareDistance(location1, location2) {
-  // Take the square root of the smallest square and add the difference to the larger.
-  const dx = Math.abs(location1.x - location2.x);
-  const dy = Math.abs(location1.y - location2.y);
-  const smallestSquare = Math.min(dx, dy);
-  const dd = Math.abs(dx - dy);
-  const hypotenuse = Math.sqrt(Math.pow(smallestSquare, 2) * 2);
-  return dd + hypotenuse;
-}
-
-function getHypotenuseLength(location1, location2) {
-  const dx = Math.abs(location1.x - location2.x);
-  const dy = Math.abs(location1.y - location2.y);
-  return Math.sqrt((dx * dx) + (dy * dy));
-}
+import {isAdjacentSquare, getSquareDistance, getHypotenuseLength} from './mapService';
 
 class Link {
   constructor(location1, location2, distance) {
@@ -102,20 +73,7 @@ class Square extends Location {
 
     return nearest;
   }
-  // TODO: What if I just approximate by "crow flight", then just correct the H value in the pathfinder?
-  // Pathfinding distance isn't the remit of Square.
-  // getDistance(location) {
-  //   // Get nearest adjacents.
-  //   // Find their nearest adjacents.
-  //   // When the adjacent IS the destination.
-
-  //   // const adjacentDistance = this.getAdjacentLocationDistance(location);
-  //   // return adjacentDistance ? adjacentDistance : getDistance(this, location);
-  // }
   getDistance(location) {
-    // const adjacentDistance = this.getAdjacentLocationDistance(location);
-    // return adjacentDistance ? adjacentDistance : getDistance(this, location);
-    // return Math.abs(this.x - location.x) + Math.abs(this.y - location.y);
     return getSquareDistance(this, location);
   }
   get x() {return this._x;}
@@ -151,7 +109,7 @@ class Map {
       squares.forEach(square2 => {
         if (isAdjacentSquare(square1, square2) && isPassable(square1) && isPassable(square2)) {
           // Add a link for all adjacent squares.
-          const distance = directionService.getDistance(square1.x - square2.x, square1.y - square2.y);
+          const distance = getDistance(square1.x - square2.x, square1.y - square2.y);
           square1.location.setLink(square2.location, distance);
         }
       });
