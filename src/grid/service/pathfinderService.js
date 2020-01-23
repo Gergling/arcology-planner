@@ -1,5 +1,5 @@
 function sortByF(node1, node2) {
-  return node1.f < node2.f ? 1 : node1.f > node2.f ? -1 : 0;
+  return node1.f < node2.f ? -1 : node1.f > node2.f ? 1 : 0;
 }
 
 function getAncestry(node, ancestry = []) {

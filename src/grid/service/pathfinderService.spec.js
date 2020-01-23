@@ -1,10 +1,9 @@
-import {isFLower, sortByF} from './pathfinderService';
+import {sortByF} from './pathfinderService';
 
-xdescribe('Pathfinder Service', () => {
-  test('#isFLower', () => {
-    expect(isFLower).toEqual(true);
-  });
+describe('Pathfinder Service', () => {
   test('#sortByF', () => {
-    expect(sortByF).toEqual(true);
+    expect(sortByF({f:0}, {f:1})).toEqual(-1);
+    expect(sortByF({f:1}, {f:0})).toEqual(1);
+    expect(sortByF({f:0}, {f:0})).toEqual(0);
   });
 });
