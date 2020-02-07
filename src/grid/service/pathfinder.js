@@ -12,7 +12,9 @@ class Path {
     this.open(start);
     this.next();
     const destinationNode = this.getDestinationClosed();
-    this.addAncestorsToPath(destinationNode);
+    if (destinationNode) {
+      this.addAncestorsToPath(destinationNode);
+    }
   }
   get start() {return this._start;}
   get destination() {return this._destination;}
@@ -62,9 +64,6 @@ class Path {
     // If the open list was empty, we're done.
     if (!sNode) {return;}
 
-    // If the destination is in the closed list, we're done.
-    if (this.getDestinationClosed()) {return;}
-
     // TODO: Could save a little time checking if sNode is the destination node.
 
     // TODO: Consider using a while loop to quit early.
@@ -72,6 +71,9 @@ class Path {
     sNode.foreachAdjacent((tLocation, distance) => {
       this.nextAdjacentLocation(tLocation, distance, sNode);
     });
+
+    // // If the destination is in the closed list, we're done.
+    // if (this.getDestinationClosed()) {return;}
 
     // Once all computation is done, repeat for sNode.
     this.next();
