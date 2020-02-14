@@ -3,32 +3,31 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 
+import gridService from '../src/grid/service/gridFactory';
+import mapFactory from '../src/grid/service/mapFactory';
+
 import Grid from '../src/grid/component/Grid';
-import gridService from '../src/grid/service/grid';
-import Sprite from '../src/sprite/component/Sprite';
-import spriteService from '../src/sprite/service/pathfindingSprite';
+import Corridor from '../src/sprite/component/Corridor';
+import Wall from '../src/sprite/component/Wall';
 
 const grid = gridService()
   .setElementSize(50)
-  .setElement(0,0)
-  .setElement(0,1)
-  .setElement(1,1)
-  .setElement(1,0);
+  .setContentCallback((x, y) => {
+    const isWall = map.findLocationByName(`${x},${y}`).links.length === 0;
+    return (isWall ? <Wall /> : <Corridor />);
+  });
 
-const wall = spriteService('wall')
-  .setGridElement(grid.getElement(1,1));
+const map = mapFactory().generateSquare(5, square => {
+  return [
+    '1,1', '2,1',
+           '2,2',
+    '1,3', '2,3'
+  ].indexOf(square.location.name) === -1;
+});
 
-const sprite = spriteService('corridor')
-  .setGridElement(grid.getElement(0,0));
-
+map.locations.forEach(location => {
+  grid.setElement(location.x, location.y);
+});
 
 storiesOf('Grid', module)
-  .add('without any interesting configuration', () => <Grid grid={grid} />);
-
-  // .add('with undefined blank item', () => <Dropdown list={list.map(item => item.value ? item : undefined)} select={action('selected undefined item')} />)
-  // .add('with placeholder label', () => <Dropdown list={list.map(item => item.value ? item : {label: 'Placeholder'})} select={action('selected placeholder label')} />)
-  // .add('with no blank items', () => <Dropdown list={list.filter(item => item.value)} select={action('selected with no empty items')} />)
-  // .add('with preselected item', () => <Dropdown list={list.filter(item => item.value)} selected='item-2' select={action('selected with no empty items')} />)
-
-// storiesOf('Sprite', module)
-//   .add('without any interesting configuration', () => <Sprite sprite={sprite} />);
+  .add('simple mapped grid', () => <Grid grid={grid} />);

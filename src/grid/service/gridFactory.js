@@ -2,7 +2,12 @@ class Grid {
   constructor() {
     this._elements = [];
     this._elementSize = 1;
+    this._callback = () => '';
   }
+  get elements() {
+    return this._elements;
+  }
+  // Deprecate this.
   getElements() {
     return this._elements;
   }
@@ -29,6 +34,13 @@ class Grid {
   }
   getElementSize() {
     return this._elementSize;
+  }
+  setContentCallback(callback) {
+    this._callback = callback;
+    return this;
+  }
+  getContentCallback(x, y) {
+    return this._callback(x, y);
   }
 }
 
@@ -57,11 +69,8 @@ class GridElement {
   set grid(value) {
     throw new Error('Cannot set grid.');
   }
-  setContentCallback(callback) {
-    this._callback = callback;
-  }
   getContentCallback() {
-    return typeof this._callback === 'function' ? this._callback() : undefined;
+    return this.grid.getContentCallback(this.x, this.y);
   }
 }
 
