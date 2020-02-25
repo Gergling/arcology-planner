@@ -107,6 +107,7 @@ class Map {
     // Generate links.
     squares.forEach(square1 => {
       squares.forEach(square2 => {
+        // TODO: Find a case where adjacency is diagonal and both squares share an adjacency with no linkages.
         if (isAdjacentSquare(square1, square2) && isPassable(square1) && isPassable(square2)) {
           // Add a link for all adjacent squares.
           const distance = getDistance(square1.x - square2.x, square1.y - square2.y);
