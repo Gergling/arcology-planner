@@ -1,5 +1,5 @@
 import mapFactory from './mapFactory';
-import pathfinderFactory from './pathfinder';
+import pathfinderFactory from './pathfinderFactory';
 
 describe('Pathfinder', () => {
   test('Testing adjacent square path', () => {
