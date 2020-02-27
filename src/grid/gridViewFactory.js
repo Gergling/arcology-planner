@@ -1,8 +1,10 @@
-class Grid {
+class GridView {
   constructor() {
-    this._elements = [];
+    this._elements    = [];
     this._elementSize = 1;
-    this._callback = () => '';
+    this._callback    = () => '';
+    this._onChange    = () => {};
+    this._offset      = {};
   }
   get elements() {
     return this._elements;
@@ -27,7 +29,6 @@ class Grid {
     }
     return this;
   }
-
   setElementSize(size) {
     this._elementSize = size;
     return this;
@@ -41,6 +42,23 @@ class Grid {
   }
   getContentCallback(x, y) {
     return this._callback(x, y);
+  }
+  onChange(callback) {
+    this._onChange = callback;
+    return this;
+  }
+  setOffset(x, y) {
+    this._offset.x = x;
+    this._offset.y = y;
+    return this;
+  }
+  moveOffset(dx, dy) {
+    this._offset.x += dx;
+    this._offset.y += dy;
+    return this;
+  }
+  get offset() {
+    return this._offset;
   }
 }
 
@@ -75,7 +93,7 @@ class GridElement {
 }
 
 function instantiate() {
-  return new Grid();
+  return new GridView();
 }
 
 export default instantiate;

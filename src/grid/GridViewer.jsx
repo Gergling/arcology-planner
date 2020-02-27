@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+
+import Canvas from '../canvas/Canvas';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 // import { faChevronDown } from '@fortawesome/free-solid-svg-icons';
 
@@ -88,42 +90,93 @@ import styled from 'styled-components';
 
 // Handle size of grid elements through a styled component.
 
-class GridElement extends Component {
-  render() {
-    const element = this.props.element;
-    const size = element.grid.getElementSize();
-    const x = element.x * size;
-    const y = element.y * size;
-    const style = {
-      position: 'absolute',
-      left: x + 'px',
-      top: y + 'px',
-      width: size + 'px',
-      height: size + 'px',
-      border: 'solid 1px black',
-    };
-    return (<div style={style}>{element.getContentCallback()}</div>);
-  }
+// class GridElement extends Component {
+//   render() {
+//     const element = this.props.element;
+//     const size = element.grid.getElementSize();
+//     const x = element.x * size;
+//     const y = element.y * size;
+//     const style = {
+//       position: 'absolute',
+//       left: x + 'px',
+//       top: y + 'px',
+//       width: size + 'px',
+//       height: size + 'px',
+//       border: 'solid 1px black',
+//     };
+//     return (<div style={style}>{element.getContentCallback()}</div>);
+//   }
+// }
+
+function updateFactory(ctx, forceUpdate) {
+  // The grid and viewModel are reconciled to output graphics which are attached
+  return grid => {
+    const size = grid.getElementSize();
+    grid.getElements().forEach(element => {
+      const x = element.x * size;
+      const y = element.y * size;
+      console.log(ctx)
+      // ctx.rect(x, y, size, size);
+      ctx.strokeRect(x, y, size, size);
+      console.log(x, y, size)
+      // ctx.strokeRect()
+    });
+    forceUpdate();
+  };
 }
 
-export default class Grid extends Component {
+function setupFactory(gridView) {
+  const setup = (ctx, forceUpdate) => {
+    const update = updateFactory(ctx, forceUpdate);
+    gridView.onChange(update);
+    update(gridView);
+  }
+  return setup;
+}
+// const setup = (ctx, forceUpdate) => {
+//   const line = (x1, y1, x2, y2) => {
+//     ctx.beginPath();
+//     ctx.moveTo(x1, y1);
+//     ctx.lineTo(x2, y2);
+//     ctx.lineWidth = 1;
+//     // ctx.strokeStyle = '#ff0000';
+//     ctx.stroke();
+//   }
+
+//   const verticalLine = x => {
+//     line(x, 0, x, ctx.canvas.height);
+//   }
+//   const horizontalLine = y => {
+//     line(0, y, ctx.canvas.width, y);
+//   }
+
+//   const vLines = ctx.canvas.width / gridSquareSize;
+//   const hLines = ctx.canvas.height / gridSquareSize;
+//   const map = (junk, idx) => idx * gridSquareSize;
+//   Array.from({length: vLines}).map(map).forEach(idx => verticalLine(idx));
+//   Array.from({length: hLines}).map(map).forEach(idx => horizontalLine(idx));
+// };
+
+export default class GridViewer extends Component {
   constructor(props) {
     super();
-    this.state = {
-      gridElements: props.grid.getElements()
-    };
+    // this.state = {
+    //   gridElements: props.gridView.getElements()
+    // };
+    this.setup = setupFactory(props.gridView);
   }
   render() {
-    const style = {
-      position: 'relative'
-    };
+    // const style = {
+    //   position: 'relative'
+    // };
     return (
-      <div style={style}>{this.state.gridElements
-        .map((item, key) => <GridElement
-          key={key}
-          element={item}
-        />)}
-      </div>
+      // <div style={style}>{this.state.gridElements
+      //   .map((item, key) => <GridElement
+      //     key={key}
+      //     element={item}
+      //   />)}
+      // </div>
+      <Canvas setup={this.setup} width="640" height="425" />
     );
   }
   // handleSelect(item) {
