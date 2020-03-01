@@ -112,14 +112,15 @@ function updateFactory(ctx, forceUpdate) {
   // The grid and viewModel are reconciled to output graphics which are attached
   return grid => {
     const size = grid.getElementSize();
-    grid.getElements().forEach(element => {
-      const x = element.x * size;
-      const y = element.y * size;
-      console.log(ctx)
-      // ctx.rect(x, y, size, size);
+    const dx = grid.offset.x;
+    const dy = grid.offset.y;
+    ctx.fillStyle = '#ffffff';
+    ctx.strokeStyle = '#000000';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    grid.elements.forEach(element => {
+      const x = (element.x * size) - dx;
+      const y = (element.y * size) - dy;
       ctx.strokeRect(x, y, size, size);
-      console.log(x, y, size)
-      // ctx.strokeRect()
     });
     forceUpdate();
   };

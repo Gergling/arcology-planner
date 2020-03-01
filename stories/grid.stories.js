@@ -33,7 +33,26 @@ map.locations.forEach(location => {
 // The small squares need to be mapped but without linking diagonals at corners.
 // At some point, will need to replace with a canvas and have that draw the contents. That's still ok, but slightly harder.
 
-// TODO: Include simple controls to change grid
+function left() {
+  gridView.moveOffset(-1, 0);
+}
+function right() {
+  gridView.moveOffset(1, 0);
+}
+function up() {
+  gridView.moveOffset(0, -1);
+}
+function down() {
+  gridView.moveOffset(0, 1);
+}
 
-storiesOf('Grid', module)
-  .add('simple mapped grid', () => <Grid gridView={gridView} />);
+storiesOf('GridView', module)
+  .add('simple mapped grid which can be moved by running a gridView function', () => (
+    <div>
+      <Grid gridView={gridView} />
+      <button onClick={left}>Left</button>
+      <button onClick={right}>Right</button>
+      <button onClick={up}>Up</button>
+      <button onClick={down}>Down</button>
+    </div>
+  ));

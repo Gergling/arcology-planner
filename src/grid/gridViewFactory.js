@@ -4,13 +4,9 @@ class GridView {
     this._elementSize = 1;
     this._callback    = () => '';
     this._onChange    = () => {};
-    this._offset      = {};
+    this._offset      = { x: 0, y: 0 };
   }
   get elements() {
-    return this._elements;
-  }
-  // Deprecate this.
-  getElements() {
     return this._elements;
   }
   getElement(x, y, callback) {
@@ -47,15 +43,18 @@ class GridView {
     this._onChange = callback;
     return this;
   }
+  runChange() {
+    return this._onChange(this);
+  }
   setOffset(x, y) {
     this._offset.x = x;
     this._offset.y = y;
-    return this;
+    return this.runChange();
   }
   moveOffset(dx, dy) {
     this._offset.x += dx;
     this._offset.y += dy;
-    return this;
+    return this.runChange();
   }
   get offset() {
     return this._offset;
